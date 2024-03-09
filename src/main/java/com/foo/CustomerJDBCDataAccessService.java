@@ -3,6 +3,7 @@ package com.foo;
 import com.foo.dao.CustomerDao;
 import com.foo.model.Customer;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,20 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public List<Customer> listAllCustomers() {
-        return null;
+        var sql = """
+                Select id , name , email , age from customer
+                """;
+
+        RowMapper<Customer>customerRowMapper=(rs,rowNum)->{
+            return new Customer (
+                    rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getInt("age"));
+        };
+
+        List<Customer>customer = jdbcTemplate.query(sql,customerRowMapper);
+        return customer ;
     }
 
     @Override
@@ -27,8 +41,8 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public void insertCustomer(Customer customer) {
-        var sql = """ 
-                Insert into customer (name,email,age)values (?,?,?) 
+        var sql = """
+                Insert into customer (name,email,age)values (?,?,?)\s
                 """;
         int update = jdbcTemplate.update(sql,customer.getName(),customer.getEmail(),customer.getAge());
         System.out.println("jdbcTemplate.update = "+ update);
