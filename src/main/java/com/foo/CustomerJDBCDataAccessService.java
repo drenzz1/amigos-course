@@ -48,21 +48,49 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public boolean existsPersonWithEmail(String email) {
-        return false;
+        var sql = """
+                Select count(id) from customer  where email = ? 
+                """;
+        Integer count =  jdbcTemplate.queryForObject(sql, Integer.class,email);
+        return count!= null && count > 0;
     }
 
     @Override
     public void deleteCustomer(Integer id) {
+        var sql = """
+                Delete from customer where id=?
+                """;
+        int result = jdbcTemplate.update(sql,id);
+        System.out.println("DeleteCustomerById result : "+result);
 
     }
 
     @Override
     public boolean existsPersonWithId(Integer id) {
-        return false;
+        var sql = """
+                Select count(id) from customer  where id = ? 
+                """;
+        Integer count =  jdbcTemplate.queryForObject(sql, Integer.class,id);
+        return count!= null && count > 0;
     }
 
     @Override
     public void updateCustomer(Customer update) {
+        if (update.getName()!=null){
+            String sql ="Update customer SET name=? where id = ?";
+            int result = jdbcTemplate.update(sql,update.getName(),update.getId());
+            System.out.println("Update customer name result = "+result);
+        }
+        if (update.getAge()!=null){
+            String sql = "Update customer SEt age = ? where id =?";
+            int result = jdbcTemplate.update(sql,update.getAge(),update.getId());
+            System.out.println("Update customer age result = "+result);
 
+        }
+        if (update.getEmail()!=null){
+            String sql = "Update customer Set email = ? where id = ?";
+            int result = jdbcTemplate.update(sql,update.getEmail(),update.getId());
+            System.out.println("Update customer email result =" +result );
+        }
     }
 }
