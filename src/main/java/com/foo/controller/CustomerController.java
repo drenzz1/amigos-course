@@ -23,7 +23,7 @@ public class CustomerController {
     }
 
     @GetMapping("{id}")
-    public Customer getCustomer(@PathVariable("id") Integer id) {
+    public Customer getCustomer(@PathVariable("id") Long id) {
         return customerService.getCustomer(id);
     }
     @PostMapping
@@ -31,11 +31,11 @@ public class CustomerController {
         customerService.addCustomer(request);
     }
     @DeleteMapping("{id}")
-    public void deleteCustomer(@PathVariable("id")Integer id){
+    public void deleteCustomer(@PathVariable("id")Long id){
         customerService.deleteCustomerById(id);
     }
     @PutMapping("{id}")
-    public void editCustomer(@PathVariable("id")Integer id,@RequestBody CustomerUpdateRequest updateRequest){
+    public void editCustomer(@PathVariable("id")Long id,@RequestBody CustomerUpdateRequest updateRequest){
         customerService.updateCustomer(id,updateRequest);
     }
 

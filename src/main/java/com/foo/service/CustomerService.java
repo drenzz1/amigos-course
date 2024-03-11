@@ -22,7 +22,7 @@ public class CustomerService {
     public List<Customer> listAllCustomers(){
         return customerDao.listAllCustomers();
     }
-    public Customer getCustomer(Integer id)  {
+    public Customer getCustomer(Long id)  {
        return  customerDao
                .selectCustomerById(id)
                .orElseThrow(()->new ResourceNotFound("Customer with id [%s] not found ".formatted(id)));
@@ -36,14 +36,14 @@ public class CustomerService {
         customerDao.insertCustomer(new Customer(customerRegistrationRequest.name(), customerRegistrationRequest.email(), customerRegistrationRequest.age()));
     }
 
-    public void deleteCustomerById(Integer id) {
+    public void deleteCustomerById(Long id) {
         if (!customerDao.existsPersonWithId(id)){
             throw new ResourceNotFound("customer with id [%s] not found ".formatted(id));
         }
         customerDao.deleteCustomer(id);
     }
 
-    public void updateCustomer(Integer id, CustomerUpdateRequest updateRequest) {
+    public void updateCustomer(Long id, CustomerUpdateRequest updateRequest) {
 
         Customer customer = getCustomer(id);
 
